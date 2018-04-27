@@ -17,7 +17,7 @@
 #  --topic spark_input
 
 # Read input file and save in mock_twitter_stream
-python add_tweets.py
+#python add_tweets.py
 
 # Read input file and save in mock_twitter_stream
-#python add_filtered_tweets.py
+python add_filtered_tweets.py
