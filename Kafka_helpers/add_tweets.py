@@ -2,11 +2,12 @@ from kafka import KafkaProducer
 import argparse
 import json
 import os
+import io
 
 print "Begin reading tweets.txt to mock_twitter_stream"
 fname = '../raw_data/tweets.txt'
 
-with open(fname, 'r', encoding='utf-8') as f:
+with io.open(fname, 'r', encoding='utf-8') as f:
     content = f.readlines()
 content = [x.strip() for x in content]
 
