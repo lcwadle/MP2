@@ -12,7 +12,7 @@ content = [x.strip() for x in content]
 
 producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 count = 0
-for tweet in content;
+for tweet in content:
     count += 1
     producer.send('mock_twitter_stream', tweet)
 
