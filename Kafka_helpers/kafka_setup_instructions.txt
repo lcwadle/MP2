@@ -1,0 +1,84 @@
+
+Download Kafka:
+  make a directory to do the install:
+    $ mkdir kafka_task
+    $ cd kafka_task
+  download the source file:
+    $ curl -O https://archive.apache.org/dist/kafka/0.10.2.0/kafka-0.10.2.0-src.tgz
+  unpack the files:
+    $ tar -xzf kafka-0.10.2.0-src.tgz
+
+Build Kafka:
+  install Java 7 (if not installed already):
+    $ sudo yum install java-1.7.0-openjdk java-1.7.0-openjdk-devel
+  set Java 7 as the current version:
+    $ sudo alternatives --config java
+    choose java 7
+  install gradle:
+    go to the kafka_task directory
+      $ cd ~/kafka_task
+    download gradle:
+      $ curl -O https://downloads.gradle.org/distributions/gradle-3.4.1-bin.zip
+    unzip gradle:
+      $ sudo mkdir /opt/gradle
+      $ sudo unzip -d /opt/gradle gradle-3.4.1-bin.zip
+    add gradle to the path:
+      $ export PATH=$PATH:/opt/gradle/gradle-3.4.1/bin
+  go to the unpacked files:
+    $ cd ~/kafka_task/kafka-0.10.2.0-src
+  compile everything:
+    $ gradle
+    $ ./gradlew jar
+
+Start Kafka:
+  go to the unpacked files:
+    $ cd ~/kafka_task/kafka-0.10.2.0-src
+  start zookeeper as an unending background process:
+    $ nohup bin/zookeeper-server-start.sh config/zookeeper.properties&
+  start kafka as an unending background process:
+    $ sudo su
+    $ nohup bin/kafka-server-start.sh config/server.properties&
+    $ exit
+
+Download Kafka Manger:
+  go to the kafka_task directory
+    $ cd ~/kafka_task
+  download the source
+    $ git clone https://github.com/yahoo/kafka-manager.git
+
+Build Kafka Manager:
+  install Java 8
+    $ sudo yum install java-1.8.0-openjdk java-1.8.0-openjdk-devel
+  set Java 8 as the current version:
+    $ sudo alternatives --config java
+    choose java 8
+  go to the source files:
+    $ cd ~/kafka_task/kafka-manager
+  edit the config file (conf/application.conf)
+    set the line: kafka-manager.zkhosts="localhost:2181"
+    remove the line: kafka-manager.zkhosts=${?ZK_HOSTS}
+  compile everything:
+    $ ./sbt clean dist
+  copy the result of compilation
+    $ cp target/universal/kafka-manager-1.3.3.4.zip ~/kafka_task
+  unzip:
+    $ unzip kafka-manager-1.3.3.4.zip
+
+Start Kafka Manger
+  go to the build result
+    $ cd ~/kafka_task/kafka-manager-1.3.3.4
+  start kafka-manager as an unending background process
+    $ nohup ./bin/kafka-manager&
+
+View Kafka Manger:
+  open a browser: http://localhost:9000
+
+Initial setup of Kafka Manager to local Kafka cluster
+  go to the kafka manager web interface (View Kafka Manger instructions)
+  click "Cluster" at the top
+  click "Add Cluster"
+  Under "Cluster Name" put anything you want like "Local_Kafka_Cluster"
+  Under "Cluster Zookeeper Hosts" set localhost:2181
+  Change "Kafka Version" to 0.10.1.0 or a later version
+  Leave the other values as the defaults
+  Click "Save" at the bottom
