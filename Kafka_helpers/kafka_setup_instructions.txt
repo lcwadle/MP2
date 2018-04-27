@@ -1,4 +1,4 @@
-
+cur
 Download Kafka:
   make a directory to do the install:
     $ mkdir kafka_task
